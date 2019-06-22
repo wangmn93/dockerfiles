@@ -11,8 +11,8 @@ RUN conda install --yes --freeze-installed \
     python-blosc \
     cytoolz \
     dask==1.2.0 \
-    dask-ml \
     nomkl \
+    dask-ml \
     numpy==1.16.2 \
     pandas==0.24.2 \
     tini==0.18.0 \
