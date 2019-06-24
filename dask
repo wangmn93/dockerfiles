@@ -12,11 +12,10 @@ RUN conda install --yes --freeze-installed \
     cytoolz \
     dask==1.2.0 \
     nomkl \
-    dask-ml[complete] \
     numpy==1.16.2 \
     pandas==0.24.2 \
     tini==0.18.0 \
-    && pip install tpot joblib tqdm Cython lightgbm \
+    && pip install tpot joblib tqdm Cython lightgbm dask-ml[complete] \
     && pip install auto-sklearn \
     && conda clean -tipsy \
     && find /opt/conda/ -type f,l -name '*.a' -delete \
