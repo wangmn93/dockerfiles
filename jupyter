@@ -14,11 +14,10 @@ RUN conda install --yes --freeze-installed \
     cytoolz \
     dask==1.2.0 \
     nomkl \
-    dask-ml \
     numpy==1.16.2 \
     pandas==0.24.2 \
     ipywidgets \
-    && pip install tpot joblib tqdm Cython lightgbm \
+    && pip install tpot joblib tqdm Cython lightgbm dask-ml[complete]\
     && pip install auto-sklearn \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.38.1 dask-labextension@0.3 \
     && pip install graphviz dask-labextension==0.3.3 --no-cache-dir --no-dependencies \
