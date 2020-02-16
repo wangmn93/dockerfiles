@@ -1,9 +1,11 @@
-FROM nvidia/cuda:10.0-devel-ubuntu18.04
+FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
-RUN apt-get update && apt-get install -y python3 python3-pip wget nano && \
-    apt-get purge --autoremove -y curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    python3-dev \
+    python3-pip \
+    python3-wheel \
+    python3-setuptools \
+    nano && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-RUN pip3 install dask[complete] cupy-cuda100 numba
-
-CMD ['dask-scheduler']
+RUN pip3 install --no-cache-dir dask[complete] cupy-cuda100 numba
