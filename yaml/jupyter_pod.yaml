@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jupyterlab
+  annotations:
+    "k8s.aliyun.com/eci-with-eip": "true"
+spec:
+  containers:
+    - image: registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:jupyterlab # 训练任务的镜像
+      name: jupyterlab
+
+
+      resources:
+        requests:
+          cpu: 12
+          memory: 48Gi
+      ports:
+        - containerPort: 8888
+          name: http
+          protocol: TCP
+
+

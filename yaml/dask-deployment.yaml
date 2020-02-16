@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jupyterlab
+  annotations:
+    "k8s.aliyun.com/eci-with-eip": "true"
+spec:
+  containers:
+    - image: registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:jupyterlab # 训练任务的镜像
+      name: jupyterlab
+      volumeMounts:
+        - name: nfs-pv
+          mountPath: /home/nas
+      resources:
+        requests:
+          cpu: 12
+          memory: 48Gi
+      ports:
+        - containerPort: 8888
+          name: http
+          protocol: TCP
+  volumes:
+    - name: cache-volume
+      flexVolume:
+        driver: alicloud/nas
+        fsType: nfs
+        options:
+          server: "3f3f649b64-uyf36.cn-shanghai.nas.aliyuncs.com"
+          path: "/"
+          vers: "4"
+          options: "minorversion=0,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport"
