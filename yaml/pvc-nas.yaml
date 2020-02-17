@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bind-completed: 'yes'
+    pv.kubernetes.io/bound-by-controller: 'yes'
+  creationTimestamp: '2020-02-17T08:48:12Z'
+  finalizers:
+    - kubernetes.io/pvc-protection
+  name: pvc-nas
+  namespace: default
+  resourceVersion: '227058960'
+  selfLink: /api/v1/namespaces/default/persistentvolumeclaims/pvc-nas
+  uid: 3ab3a8aa-5162-11ea-871d-16bfbe3ae69c
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: nas
+  volumeMode: Filesystem
+  volumeName: pv-nas-static
+status:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 20Gi
+  phase: Bound

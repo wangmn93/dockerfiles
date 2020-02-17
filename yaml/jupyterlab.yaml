@@ -12,11 +12,14 @@ spec:
 
       resources:
         requests:
-          cpu: 12
-          memory: 48Gi
+          cpu: 2
+          memory: 8Gi
       ports:
-        - containerPort: 8888
-          name: http
+        - containerPort: 8786
+          name: scheduler-port
+          protocol: TCP
+        - containerPort: 8787
+          name: dashboard
           protocol: TCP
 
 

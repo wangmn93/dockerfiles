@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/bound-by-controller: 'yes'
+  creationTimestamp: '2020-02-17T08:45:34Z'
+  finalizers:
+    - kubernetes.io/pv-protection
+  name: pv-nas-static
+  resourceVersion: '227058958'
+  selfLink: /api/v1/persistentvolumes/pv-nas-static
+  uid: dc92e131-5161-11ea-871d-16bfbe3ae69c
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 20Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: pvc-nas
+    namespace: default
+    resourceVersion: '227058954'
+    uid: 3ab3a8aa-5162-11ea-871d-16bfbe3ae69c
+  flexVolume:
+    driver: alicloud/nas
+    options:
+      options: >-
+        minorversion=0,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport
+      path: /
+      server: 379854b43c-ddd30.cn-shanghai.nas.aliyuncs.com
+      vers: '4'
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nas
+  volumeMode: Filesystem
+status:
+  phase: Bound

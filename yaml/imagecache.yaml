@@ -1,0 +1,7 @@
+apiVersion: eci.alibabacloud.com/v1
+kind: ImageCache
+metadata:
+  name: gp-mining
+spec:
+  images:
+    - registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:gp-mining

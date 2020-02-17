@@ -1,0 +1,72 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+  creationTimestamp: '2020-02-17T07:02:23Z'
+  generation: 2
+  labels:
+    app: dask
+  name: dask-scheduler
+  namespace: default
+  resourceVersion: '227237863'
+  selfLink: /apis/apps/v1beta2/namespaces/default/deployments/dask-scheduler
+  uid: 7271082a-5153-11ea-871d-16bfbe3ae69c
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: dask
+      component: scheduler
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dask
+        component: scheduler
+    spec:
+      containers:
+        - command:
+            - dask-scheduler
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:gp-mining'
+          imagePullPolicy: IfNotPresent
+          name: dask-scheduler
+          ports:
+            - containerPort: 8786
+              name: scheduler-port
+              protocol: TCP
+            - containerPort: 8787
+              name: dashboard-port
+              protocol: TCP
+          resources:
+            requests:
+              cpu: '2'
+              memory: 8Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  conditions:
+    - lastTransitionTime: '2020-02-17T07:02:23Z'
+      lastUpdateTime: '2020-02-17T07:04:41Z'
+      message: ReplicaSet "dask-scheduler-57cd8f944f" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: 'True'
+      type: Progressing
+    - lastTransitionTime: '2020-02-17T07:27:02Z'
+      lastUpdateTime: '2020-02-17T07:27:02Z'
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: 'True'
+      type: Available
+  observedGeneration: 2
