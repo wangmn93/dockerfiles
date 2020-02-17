@@ -1,0 +1,6 @@
+dask[complete]
+cupy-cuda100
+numba
+deap
+joblib
+tqdm
