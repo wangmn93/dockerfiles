@@ -1,25 +1,66 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1beta2
+kind: Deployment
 metadata:
   name: jupyterlab
-  annotations:
-    "k8s.aliyun.com/eci-with-eip": "true"
+  labels:
+    app: jupyterlab
 spec:
-  containers:
-    - image: registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:jupyterlab # 训练任务的镜像
-      name: jupyterlab
+  replicas: 0
+  selector:
+    matchLabels:
+      app: jupyterlab
+  template:
+    metadata:
+      labels:
+        app: jupyterlab
+    annotations:
+      k8s.aliyun.com/eci-image-cache: "true"
+    spec:
+      containers:
+        - args:
+            - 'lab'
+            - '--allow-root'
+            - '--ip'
+            - '0.0.0.0
+          command:
+            - jupyter
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/cuda:data-routine'
+          workingDir: /mnt/nas
+          imagePullPolicy: IfNotPresent
+          name: jupyterlab
+          resources:
+            requests:
+              cpu: '2'
+              memory: 8Gi
+          ports:
+            - containerPort: 8888
+              name: jupyter-server
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: pvc-nas
 
+      volumes:
+        - name: pvc-nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jupyterlab
+  name: jupyterlab-svc
 
-      resources:
-        requests:
-          cpu: 2
-          memory: 8Gi
-      ports:
-        - containerPort: 8786
-          name: scheduler-port
-          protocol: TCP
-        - containerPort: 8787
-          name: dashboard
-          protocol: TCP
+spec:
+  ports:
+    - name: jupyter-server
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+  selector:
+    app: jupyterlab
+  type: LoadBalancer
+
 
 

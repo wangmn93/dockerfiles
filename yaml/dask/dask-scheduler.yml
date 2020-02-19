@@ -30,6 +30,8 @@ spec:
       labels:
         app: dask
         component: scheduler
+    annotations:
+      k8s.aliyun.com/eci-image-cache: "true"
     spec:
       containers:
         - command:

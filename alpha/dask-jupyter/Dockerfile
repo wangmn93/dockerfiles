@@ -9,3 +9,5 @@ RUN echo "index-url = http://mirrors.cloud.aliyuncs.com/pypi/simple/" >> ~/.pip/
 RUN echo "[install]" >> ~/.pip/pip.conf
 RUN echo "trusted-host = mirrors.cloud.aliyuncs.com" >> ~/.pip/pip.conf
 
+WORKDIR /tmp
+

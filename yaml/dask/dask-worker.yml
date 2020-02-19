@@ -30,6 +30,8 @@ spec:
       labels:
         app: dask
         component: worker
+    annotations:
+      k8s.aliyun.com/eci-image-cache: "true"
     spec:
       containers:
         - args:
