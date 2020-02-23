@@ -34,6 +34,6 @@ WORKDIR /
 
 COPY start.sh start.sh
 
-CMD ./start.sh
+CMD /bin/sh start.sh
 
 

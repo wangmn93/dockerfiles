@@ -1,0 +1,183 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dask
+  name: dask-scheduler
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: dask
+      component: scheduler
+  template:
+    metadata:
+      labels:
+        app: dask
+        component: scheduler
+    annotations:
+    spec:
+      containers:
+        - command:
+            - dask-scheduler
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-cuda-jupyter'
+          imagePullPolicy: IfNotPresent
+          name: dask-scheduler
+          workingDir: /
+          ports:
+            - containerPort: 8786
+              name: scheduler-port
+              protocol: TCP
+            - containerPort: 8787
+              name: dashboard-port
+              protocol: TCP
+            - containerPort: 8888
+                name: jupyter-port
+                protocol: TCP
+          resources:
+            requests:
+              cpu: '2'
+              memory: 8Gi
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: nas
+      volumes:
+        - name: nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dask
+  name: dask-cpu-worker
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: dask
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: dask
+        component: worker
+    annotations:
+      k8s.aliyun.com/eci-image-snapshot-id: imc-uf6hngjb4a32puhs5v7v
+      k8s.aliyun.com/eci-instance-type: ecs.gn5i-c4g1.xlarge
+    spec:
+      containers:
+        - args:
+            - 'dask-headless-service:8786'
+            - '--nthreads'
+            - '2'
+          command:
+            - dask-worker
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-jupyter'
+          imagePullPolicy: IfNotPresent
+          name: dask-worker
+          resources:
+            limits:
+              nvidia.com/gpu: '1'
+#            requests:
+#              cpu: '2'
+#              memory: 8Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: nas
+      volumes:
+        - name: nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dask
+  name: dask-worker
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: dask
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: dask
+        component: worker
+    annotations:
+      k8s.aliyun.com/eci-image-snapshot-id: imc-uf63q73uicbu2tjjxpmu
+      k8s.aliyun.com/eci-gpu-type : "P4"
+#      k8s.aliyun.com/eci-instance-type: ecs.gn5i-c4g1.xlarge
+    spec:
+      containers:
+        - args:
+            - 'dask-headless-service:8786'
+            - '--nthreads'
+            - '2'
+          command:
+            - dask-worker
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-cuda-jupyter'
+          imagePullPolicy: IfNotPresent
+          name: dask-worker
+          resources:
+            limits:
+              nvidia.com/gpu: '1'
+#            requests:
+#              cpu: '2'
+#              memory: 8Gi
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: nas
+      volumes:
+        - name: nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dask-headless-service
+spec:
+  clusterIP: None
+  ports:
+    - port: 8786
+      protocol: TCP
+      targetPort: 8786
+  selector:
+    app: dask
+    component: scheduler
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dask
+  name: dask-service
+spec:
+  ports:
+    - name: scheduler-port
+      nodePort: 31596
+      port: 8787
+      protocol: TCP
+      targetPort: 8787
+    - name: dashboard-port
+      nodePort: 31825
+      port: 8786
+      protocol: TCP
+      targetPort: 8786
+    - name: jupyter-port
+      nodePort: 32287
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+  selector:
+    app: dask
+    component: scheduler
+  type: LoadBalancer
