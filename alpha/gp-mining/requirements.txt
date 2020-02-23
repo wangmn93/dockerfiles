@@ -1,6 +1,0 @@
-dask[complete]
-cupy-cuda100==7.2.0
-numba
-deap
-joblib
-tqdm
