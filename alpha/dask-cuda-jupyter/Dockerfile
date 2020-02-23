@@ -17,7 +17,7 @@ WORKDIR /tmp/distributed
 
 RUN python3 setup.py install
 
-RUN pip3 install bokeh pynvml jupyter jupyterlab
+RUN pip3 install bokeh pynvml jupyter jupyterlab jupyter-server-proxy
 
 RUN mkdir ~/.pip
 
