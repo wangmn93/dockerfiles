@@ -1,4 +1,4 @@
-FROM registry.cn-shanghai.aliyuncs.com/wmn/cuda:3.6.10-slim
+FROM registry.cn-shanghai.aliyuncs.com/wmn/python:3.6.10-slim
 
 RUN apt-get update \
     && apt-get install -y gcc nano git\

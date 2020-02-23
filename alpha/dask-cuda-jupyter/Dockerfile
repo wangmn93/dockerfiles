@@ -12,7 +12,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 WORKDIR /tmp
 
 RUN git clone https://github.com/dask/distributed.git
-RUN cd distributed
+WORKDIR /tmp/distributed
 RUN python3 setup.py install
 
 RUN pip3 install bokeh pynvml
@@ -23,3 +23,5 @@ RUN echo "[global]" >> ~/.pip/pip.conf
 RUN echo "index-url = http://mirrors.cloud.aliyuncs.com/pypi/simple/" >> ~/.pip/pip.conf
 RUN echo "[install]" >> ~/.pip/pip.conf
 RUN echo "trusted-host = mirrors.cloud.aliyuncs.com" >> ~/.pip/pip.conf
+
+WORKDIR /tmp
