@@ -14,7 +14,7 @@ RUN echo "[install]" >> ~/.pip/pip.conf
 RUN echo "trusted-host = mirrors.cloud.aliyuncs.com" >> ~/.pip/pip.conf
 
 RUN jupyter notebook --generate-config
-RUN echo "c.NotebookApp.password = u'sha1:e894546fae86:f86191b698d0c389de84f0dc6b0840e85fecbdf1'" >> /home/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.password = u'sha1:e894546fae86:f86191b698d0c389de84f0dc6b0840e85fecbdf1'" >> /root/.jupyter/jupyter_notebook_config.py
 
 COPY start.sh /tmp/start.sh
 
