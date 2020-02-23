@@ -12,10 +12,12 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 WORKDIR /tmp
 
 RUN git clone https://github.com/dask/distributed.git
+
 WORKDIR /tmp/distributed
+
 RUN python3 setup.py install
 
-RUN pip3 install bokeh pynvml
+RUN pip3 install bokeh pynvml jupyter jupyterlab
 
 RUN mkdir ~/.pip
 
