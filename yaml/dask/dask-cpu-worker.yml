@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dask
+  name: dask-cpu-worker
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: dask
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: dask
+        component: worker
+    annotations:
+      k8s.aliyun.com/eci-image-snapshot-id: imc-uf6hngjb4a32puhs5v7v
+      k8s.aliyun.com/eci-instance-type: ecs.gn5i-c4g1.xlarge
+    spec:
+      containers:
+        - args:
+            - 'dask-headless-service:8786'
+            - '--nthreads'
+            - '2'
+          command:
+            - dask-worker
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-jupyter'
+          imagePullPolicy: IfNotPresent
+          name: dask-worker
+          resources:
+            limits:
+              nvidia.com/gpu: '1'
+#            requests:
+#              cpu: '2'
+#              memory: 8Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: nas
+      volumes:
+        - name: nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
