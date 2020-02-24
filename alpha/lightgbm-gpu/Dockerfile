@@ -21,6 +21,9 @@ WORKDIR /tmp/LightGBM/python-package
 
 RUN python3 setup.py install --precompile
 
+RUN mkdir -p /etc/OpenCL/vendors
+RUN echo "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+
 WORKDIR /
 
 
