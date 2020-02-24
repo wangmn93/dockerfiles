@@ -15,7 +15,7 @@ RUN cmake -DOpenCL_LIBRARY=/usr/local/cuda-10.0/lib64/libOpenCL.so -DOpenCL_INCL
 # cmake -DUSE_GPU=1 -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/include/ ..
 RUN make -j$(nproc)
 
-RUN pip3 install setuptools numpy scipy scikit-learn<=0.21.3
+RUN pip3 install setuptools numpy scipy "scikit-learn<=0.21.3"
 
 WORKDIR /tmp/LightGBM/python-package
 
