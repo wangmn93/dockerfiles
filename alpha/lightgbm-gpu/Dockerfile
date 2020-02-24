@@ -1,4 +1,4 @@
-FROM registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-cuda-jupyter
+FROM registry.cn-shanghai.aliyuncs.com/wmn/alpha:dask-cuda-jupyter
 
 RUN apt-get update \
     && apt-get install -y git cmake build-essential libboost-dev libboost-system-dev libboost-filesystem-dev\
