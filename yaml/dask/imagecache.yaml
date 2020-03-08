@@ -1,7 +1,7 @@
 apiVersion: eci.alibabacloud.com/v1
 kind: ImageCache
 metadata:
-  name: dask-cuda-jupyter
+  name: lightgbm-gpu
 spec:
   images:
-    - registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:dask-cuda-jupyter
+    - registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:lightgbm-gpu

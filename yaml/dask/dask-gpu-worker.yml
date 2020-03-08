@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dask
+  name: dask-gpu-worker
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dask
+      component: worker
+  template:
+    metadata:
+      annotations:
+        k8s.aliyun.com/eci-gpu-type: "P4"
+      labels:
+        app: dask
+        component: worker
+    spec:
+      containers:
+        - args:
+            - 'dask-headless-service:8786'
+            - '--nprocs'
+            - '1'
+          command:
+            - dask-worker
+          image: 'registry-vpc.cn-shanghai.aliyuncs.com/wmn/alpha:lightgbm-gpu'
+          imagePullPolicy: Always
+          name: dask-worker
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /mnt/nas
+              name: nas
+
+      volumes:
+        - name: nas
+          persistentVolumeClaim:
+            claimName: pvc-nas
